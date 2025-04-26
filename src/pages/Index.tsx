@@ -11,6 +11,7 @@ import Header from "@/components/Header";
 import { AnalysisProvider, useAnalysis } from "@/contexts/AnalysisContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText } from "lucide-react"; // Import the FileText icon from lucide-react
 
 const ExampleAnalysis = () => {
   const { currentAnalysis } = useAnalysis();
@@ -19,7 +20,7 @@ const ExampleAnalysis = () => {
     return (
       <Card className="col-span-2 flex flex-col items-center justify-center p-10 text-center">
         <div className="rounded-full bg-primary/10 p-6 mb-4">
-          <File className="h-12 w-12 text-primary" />
+          <FileText className="h-12 w-12 text-primary" />
         </div>
         <CardTitle className="mb-2">No Text Analyzed Yet</CardTitle>
         <CardDescription className="max-w-md">
