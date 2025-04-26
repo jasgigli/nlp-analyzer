@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,16 +14,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 205 95% 33%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 195 100% 35%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 195 100% 40%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,22 +34,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -79,14 +64,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -98,4 +75,66 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.token-highlight {
+  @apply px-1 py-0.5 rounded font-mono text-sm font-medium transition-colors;
+}
+
+.pos-tag {
+  @apply token-highlight mr-0.5 inline-flex items-center justify-center;
+}
+
+.entity-tag {
+  @apply token-highlight border-2;
+}
+
+.pos-noun { @apply bg-tags-noun text-white; }
+.pos-verb { @apply bg-tags-verb text-white; }
+.pos-adjective { @apply bg-tags-adjective text-white; }
+.pos-adverb { @apply bg-tags-adverb text-white; }
+.pos-pronoun { @apply bg-tags-pronoun text-white; }
+.pos-preposition { @apply bg-tags-preposition text-white; }
+.pos-conjunction { @apply bg-tags-conjunction text-white; }
+.pos-interjection { @apply bg-tags-interjection text-white; }
+.pos-determiner { @apply bg-tags-determiner text-white; }
+.pos-other { @apply bg-tags-other text-white; }
+
+.entity-person { @apply bg-entity-person text-black border-entity-person; }
+.entity-organization { @apply bg-entity-organization text-black border-entity-organization; }
+.entity-location { @apply bg-entity-location text-black border-entity-location; }
+.entity-date { @apply bg-entity-date text-black border-entity-date; }
+.entity-time { @apply bg-entity-time text-black border-entity-time; }
+.entity-money { @apply bg-entity-money text-black border-entity-money; }
+.entity-percent { @apply bg-entity-percent text-black border-entity-percent; }
+.entity-other { @apply bg-entity-other text-black border-entity-other; }
+
+.syntax-tree-container {
+  @apply overflow-x-auto;
+}
+
+.syntax-tree {
+  font-family: monospace;
+}
+
+.syntax-tree ul {
+  @apply pt-2 pl-5 relative;
+}
+
+.syntax-tree li {
+  @apply relative pt-2;
+}
+
+.syntax-tree li::before {
+  content: "";
+  @apply absolute border-l-2 border-gray-300 top-0 left-[-20px] h-full;
+}
+
+.syntax-tree li::after {
+  content: "";
+  @apply absolute border-t-2 border-gray-300 top-4 left-[-20px] w-5;
+}
+
+.syntax-tree li:last-child::before {
+  @apply h-4;
 }
