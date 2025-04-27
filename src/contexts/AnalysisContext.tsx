@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from "react";
 
 export type POSTag = {
@@ -36,8 +35,18 @@ export type AnalysisResult = {
   entities: EntityTag[];
   syntax: SyntaxNode;
   sentiment: SentimentScore;
-  summary?: string;
-  keywords?: string[];
+  summary: string;
+  keywords: string[];
+  readability?: {
+    score: number;
+    level: string;
+    avgSentenceLength: number;
+    avgWordLength: number;
+  };
+  languageDetection?: {
+    language: string;
+    confidence: number;
+  };
 };
 
 export type AnalysisContextType = {
@@ -80,28 +89,21 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setIsAnalyzing(true);
     
     try {
-      // In a real app, we'd call the backend API here
-      // For now, we'll directly use client-side processing
       const result = await analyzeText(text);
       setCurrentAnalysis(result);
       addToHistory(result);
     } catch (error) {
       console.error("Error analyzing text:", error);
-      // In a real app, we'd display an error toast here
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  // This is a mock function for client-side processing
-  // In a real app, this would be an API call to the backend
   const analyzeText = async (text: string): Promise<AnalysisResult> => {
-    // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const wordList = text.split(/\s+/).filter(Boolean);
     
-    // Mock POS tagging
     const posTypes = ["noun", "verb", "adjective", "adverb", "pronoun", "preposition", "conjunction", "determiner", "other"];
     const posTags = ["NN", "VB", "JJ", "RB", "PRP", "IN", "CC", "DT", "OTHER"];
     
@@ -114,13 +116,11 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       };
     });
     
-    // Mock entity recognition
     const entityTypes = ["person", "organization", "location", "date", "time", "money", "percent", "other"];
     const entities: EntityTag[] = [];
     let textCopy = text;
     let startIndex = 0;
     
-    // Create random entities (about 10% of words)
     wordList.forEach((word, idx) => {
       if (Math.random() > 0.9) {
         const start = textCopy.indexOf(word, startIndex);
@@ -138,7 +138,6 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     });
     
-    // Mock syntax tree
     const createSyntaxTree = (words: string[], depth = 0): SyntaxNode => {
       if (words.length <= 1 || depth > 3) {
         return {
@@ -166,8 +165,7 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     const syntax = createSyntaxTree(wordList);
     
-    // Mock sentiment analysis
-    let sentimentScore = Math.random() * 2 - 1; // -1 to 1
+    let sentimentScore = Math.random() * 2 - 1;
     const positive = wordList.filter(() => Math.random() > 0.7);
     const negative = wordList.filter(() => Math.random() > 0.7);
     
@@ -178,15 +176,31 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       negative,
     };
     
-    // Mock summary and keywords
-    const summary = wordList.length > 10 
-      ? text.split(". ").slice(0, 2).join(". ") + "."
+    const sentences = text.split(/[.!?]+/).filter(Boolean);
+    const summary = sentences.length > 3 
+      ? sentences.slice(0, 3).join(". ") + "."
       : text;
-      
-    const keywords = wordList
-      .filter(() => Math.random() > 0.7)
+
+    const words = text.toLowerCase().split(/\W+/).filter(word => 
+      word.length > 3 && !["the", "and", "but", "for", "that", "this"].includes(word)
+    );
+    const uniqueWords = Array.from(new Set(words));
+    const keywords = uniqueWords
+      .sort(() => Math.random() - 0.5)
       .slice(0, 5);
-      
+
+    const readability = {
+      score: Math.random() * 100,
+      level: ["Elementary", "Intermediate", "Advanced"][Math.floor(Math.random() * 3)],
+      avgSentenceLength: sentences.reduce((acc, sent) => acc + sent.split(" ").length, 0) / sentences.length,
+      avgWordLength: words.reduce((acc, word) => acc + word.length, 0) / words.length
+    };
+
+    const languageDetection = {
+      language: "English",
+      confidence: 0.95
+    };
+
     return {
       id: Date.now().toString(),
       text,
@@ -197,6 +211,8 @@ export const AnalysisProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       sentiment,
       summary,
       keywords,
+      readability,
+      languageDetection,
     };
   };
 
